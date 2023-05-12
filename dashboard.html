@@ -40,7 +40,7 @@
             <input type="text" for="description" id="description"><br>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-secondary close-button" data-bs-dismiss="modal">Close</button>
             <button type="button" class="btn btn-primary" id="submitbtn">Save</button>
             <button type="button" class="btn btn-primary" id="updatebtn" style="display:none">Update</button>
           </div>
@@ -52,6 +52,7 @@
 
   <script>
     const submitbtn = document.querySelector('#submitbtn');
+    
 
     submitbtn.addEventListener('click', modalPostData);
 
@@ -65,8 +66,12 @@
         description: description.value
       }
       const storedData = await postData(url, data)
+      hideModal();
+      createBooksTable()
 
     }
+
+
     async function postData(url = "", data = {}) {
 
       // Default options are mar =ked with *
@@ -102,15 +107,6 @@
     }
   </script>
 
-  <!-- <div class="modalEdit">
-   
-  <label for="title">Title</label>
-  <input type="text" for="title" id="title"><br>
-  <label for="description">Description</label>
-  <input type="text" for="description" id="description"><br>
-  <button onClick="editData()" type="submit">Save</button>
-  
-  </div> -->
 
 
   <div id="exTab1" class="container">
@@ -266,10 +262,6 @@
     
       async function updateData(id)
       {
-        document.querySelector('#updatebtn').value = '';
-        document.querySelector('#submitbtn').value = '';
-        document.querySelector('#updatebtn').style.display = 'none';
-        document.querySelector('#submitbtn').style.display = 'block';
         const updateTitle = document.querySelector('#title').value;
         const updateDescription = document.querySelector('#description').value;
 
@@ -281,6 +273,8 @@
         url = `http://localhost:8000/books/updateBook/${id}`;
         const updateStored = await putData(url, updateData)
         // console.log(updateStored)
+        hideModal();
+        createBooksTable()
       }
 
 
@@ -313,7 +307,10 @@
           // console.log(deleteData)
           url = `http://localhost:8000/books/deleteBook/${id}`;
           const deletedStored = await deleteData(url, data)
+          // console.log(deletedStored)
+          createBooksTable()
         }
+
 
         
 
@@ -336,12 +333,13 @@
 
 
     function showModal() {
-      const editmodal = document.querySelector('.editmodal');
+      const editmodal = document.querySelector('.close-button');
+
       editmodal.style.display = "block";
     }
     function hideModal() {
-      const editmodal = document.querySelector('.editmodal');
-      editmodal.style.display = "none";
+      const editmodal = document.querySelector('.close-button');
+      editmodal.click();
     }
 
 
